@@ -267,7 +267,8 @@ renderCUDA(
 	const float2* __restrict__ points_xy_image,
 	const float* __restrict__ features,
 	const float4* __restrict__ conic_opacity,
-	float* __restrict__ final_T,
+	//float* __restrict__ final_T,
+	float* __restrict__ out_alpha,
 	uint32_t* __restrict__ n_contrib,
 	const float* __restrict__ bg_color,
 	float* __restrict__ out_color,
@@ -384,7 +385,8 @@ renderCUDA(
 	// rendering data to the frame and auxiliary buffers.
 	if (inside)
 	{
-		final_T[pix_id] = T;
+		//final_T[pix_id] = T;
+		out_alpha[pix_id] = 1 - T;
 		n_contrib[pix_id] = last_contributor;
 		for (int ch = 0; ch < CHANNELS; ch++)
 			out_color[ch * H * W + pix_id] = C[ch] + T * bg_color[ch];
@@ -400,7 +402,8 @@ void FORWARD::render(
 	const float2* means2D,
 	const float* colors,
 	const float4* conic_opacity,
-	float* final_T,
+	//float* final_T,
+	float* out_alpha,
 	uint32_t* n_contrib,
 	const float* bg_color,
 	float* out_color,
@@ -414,7 +417,8 @@ void FORWARD::render(
 		means2D,
 		colors,
 		conic_opacity,
-		final_T,
+		//final_T,
+		out_alpha,
 		n_contrib,
 		bg_color,
 		out_color,
